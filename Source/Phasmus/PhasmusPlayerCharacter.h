@@ -14,15 +14,10 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, Category = Mesh)
+	USkeletalMeshComponent* FirstPersonMesh;
 
-	// Use this if we want to include a first-person mesh
-	//UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	//USkeletalMeshComponent* FirstPersonMesh;
-
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-    USkeletalMeshComponent* ThirdPersonMesh;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
 
 	// Handles moving forward/backward
