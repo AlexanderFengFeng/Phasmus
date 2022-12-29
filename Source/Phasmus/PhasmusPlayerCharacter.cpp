@@ -30,10 +30,11 @@ APhasmusPlayerCharacter::APhasmusPlayerCharacter()
 	FirstPersonMesh->CastShadow = false;
 	FirstPersonMesh->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
 	FirstPersonMesh->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
+	FirstPersonMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	// Set up third-person mesh
 	GetMesh()->SetOwnerNoSee(true);
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	// Set up movement component
 	if (UCharacterMovementComponent* MovementComponent = GetCharacterMovement())
@@ -47,14 +48,12 @@ APhasmusPlayerCharacter::APhasmusPlayerCharacter()
 void APhasmusPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void APhasmusPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
