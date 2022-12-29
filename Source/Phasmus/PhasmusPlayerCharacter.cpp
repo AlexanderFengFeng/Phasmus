@@ -18,7 +18,7 @@ APhasmusPlayerCharacter::APhasmusPlayerCharacter()
 	// Create and set up the first-person camera component
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 0f, 64.f));
+	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 0, 64.f));
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
 	// Set up first-person mesh
