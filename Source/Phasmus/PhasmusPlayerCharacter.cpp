@@ -5,20 +5,21 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 // Sets default values
 APhasmusPlayerCharacter::APhasmusPlayerCharacter()
 {
-	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(40.f, 90.0f);
 
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	//PrimaryActorTick.bCanEverTick = true;
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = true;
 
 	// Create and set up the first-person camera component
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 0, 64.f));
+	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 0.f, 64.f));
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
 	// Set up first-person mesh
@@ -27,9 +28,19 @@ APhasmusPlayerCharacter::APhasmusPlayerCharacter()
 	FirstPersonMesh->SetOnlyOwnerSee(true);
 	FirstPersonMesh->bCastDynamicShadow = false;
 	FirstPersonMesh->CastShadow = false;
-	// TODO: Change values to be set from properties
 	FirstPersonMesh->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
 	FirstPersonMesh->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
+
+	// Set up third-person mesh
+	GetMesh()->SetOwnerNoSee(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// Set up movement component
+	if (UCharacterMovementComponent* MovementComponent = GetCharacterMovement())
+	{
+		MovementComponent->MaxWalkSpeed = 300.f; // in cm/s
+		MovementComponent->MaxWalkSpeedCrouched = 150.f; // in cm/s
+	}
 }
 
 // Called when the game starts or when spawned
