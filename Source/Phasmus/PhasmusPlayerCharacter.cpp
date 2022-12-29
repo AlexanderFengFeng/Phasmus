@@ -66,8 +66,8 @@ void APhasmusPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &APhasmusPlayerCharacter::MoveRight);
 
 	// Bind looking events using mouse
-	PlayerInputComponent->BindAxis("Turn Right / Left Mouse", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("Look Up / Down Mouse", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("Look Up / Down Mouse", this, &APhasmusPlayerCharacter::LookUp);
+	PlayerInputComponent->BindAxis("Turn Right / Left Mouse", this, &APhasmusPlayerCharacter::LookRight);
 }
 
 void APhasmusPlayerCharacter::MoveForward(float Value)
@@ -84,5 +84,15 @@ void APhasmusPlayerCharacter::MoveRight(float Value)
 	{
 		AddMovementInput(GetActorRightVector(), Value);
 	}
+}
+
+void APhasmusPlayerCharacter::LookUp(float Value)
+{
+	AddControllerPitchInput(Value * LookSensitivity);
+}
+
+void APhasmusPlayerCharacter::LookRight(float Value)
+{
+	AddControllerYawInput(Value * LookSensitivity);
 }
 

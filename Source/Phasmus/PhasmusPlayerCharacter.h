@@ -22,9 +22,14 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 
 	// Handles moving forward/backward
 	void MoveForward(float Value);
-
 	// Handles strafing movement, left and right
 	void MoveRight(float Value);
+	// Handles looking around. Linked to look sensitivity
+	void LookUp(float Value);
+	void LookRight(float Value);
+
+	UPROPERTY(EditAnywhere)
+	float LookSensitivity = 0.4f;
 
 public:
 	// Sets default values for this character's properties
