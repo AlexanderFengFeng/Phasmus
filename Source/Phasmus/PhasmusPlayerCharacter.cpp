@@ -61,6 +61,9 @@ void APhasmusPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Bind action events
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APhasmusPlayerCharacter::Interact);
+
 	// Bind movement events
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &APhasmusPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &APhasmusPlayerCharacter::MoveRight);
@@ -96,3 +99,7 @@ void APhasmusPlayerCharacter::LookRight(float Value)
 	AddControllerYawInput(Value * LookSensitivity);
 }
 
+void APhasmusPlayerCharacter::Interact()
+{
+    // TODO: Write me.
+}

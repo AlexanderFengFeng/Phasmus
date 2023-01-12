@@ -27,6 +27,7 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 	// Handles looking around. Linked to look sensitivity
 	void LookUp(float Value);
 	void LookRight(float Value);
+	void Interact();
 
 	UPROPERTY(EditAnywhere)
 	float LookSensitivity = 0.4f;
