@@ -11,8 +11,9 @@ class APhasmusGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
-public:
-	APhasmusGameMode();
+//public:
+	
+	//APhasmusGameMode();
 };
 
 
