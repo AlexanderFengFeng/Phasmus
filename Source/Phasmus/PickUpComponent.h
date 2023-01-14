@@ -7,7 +7,8 @@
 #include "PhasmusPlayerCharacter.h"
 #include "PickUpComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickUp, APhasmusPlayerCharacter*, PickUpCharacter);
+// TODO: Rename to FOnPickUp once there is no conflict.
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickedUp, APhasmusPlayerCharacter*, PickUpCharacter);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class PHASMUS_API UPickUpComponent : public USphereComponent
@@ -17,7 +18,7 @@ class PHASMUS_API UPickUpComponent : public USphereComponent
 public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
-	FOnPickUp OnPickUp;
+	FOnPickedUp OnPickUp;
 
 protected:
 
