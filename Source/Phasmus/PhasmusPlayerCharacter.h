@@ -17,6 +17,9 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, Category = Mesh)
 	USkeletalMeshComponent* FirstPersonMesh;
 
+	UPROPERTY(EditAnywhere, Category = Gameplay)
+	class UGrabber* Grabber;
+
 	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
 
