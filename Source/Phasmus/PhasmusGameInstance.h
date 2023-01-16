@@ -13,9 +13,4 @@ UCLASS()
 class PHASMUS_API UPhasmusGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-
-//	TSubclassOf<class UHeadUpDisplay> HUD;
-//
-//public:
-//	UPhasmusGameInstance();
 };
