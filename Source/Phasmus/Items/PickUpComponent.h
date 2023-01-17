@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SphereComponent.h"
-#include "PhasmusPlayerCharacter.h"
+#include "Phasmus/PhasmusPlayerCharacter.h"
 #include "PickUpComponent.generated.h"
 
 // TODO: Rename to FOnPickUp once there is no conflict.
@@ -17,7 +17,7 @@ class PHASMUS_API UPickUpComponent : public USphereComponent
 
 public:
 
-	UPROPERTY(BlueprintAssignable, Category = "Interaction")
+	//UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnPickedUp OnPickUp;
 
 protected:
