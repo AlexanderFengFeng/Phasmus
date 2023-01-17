@@ -19,7 +19,5 @@ bool UHeadsUpDisplay::Initialize()
 void UHeadsUpDisplay::UpdateInteractPromptVisibility(bool bMakeVisible)
 {
     if (InteractPrompt != nullptr) return;
-
-    FLinearColor Color = bMakeVisible ? FLinearColor::White : FLinearColor::Transparent;
-    InteractPrompt->SetColorAndOpacity(Color);
+    InteractPrompt->SetOpacity(bMakeVisible ? 1.0f : 0.f);
 }
