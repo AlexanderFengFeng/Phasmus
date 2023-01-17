@@ -25,3 +25,8 @@ void APhasmusPlayerController::BeginPlay()
         HUD->AddToViewport();
     }
 }
+
+UHeadsUpDisplay* APhasmusPlayerController::GetHUD()
+{
+    return HUD;
+}

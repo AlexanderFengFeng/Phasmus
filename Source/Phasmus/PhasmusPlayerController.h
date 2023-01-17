@@ -23,6 +23,8 @@ class PHASMUS_API APhasmusPlayerController : public APlayerController
 public:
 	APhasmusPlayerController();
 
+	UHeadsUpDisplay* GetHUD();
+
 protected:
 	virtual void BeginPlay() override;
 };
