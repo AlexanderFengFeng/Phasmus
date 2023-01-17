@@ -9,11 +9,6 @@ UInteractComponent::UInteractComponent()
     OnComponentEndOverlap.AddDynamic(this, &UInteractComponent::OnSphereEndOverlap);
 }
 
-void UInteractComponent::BeginPlay()
-{
-
-}
-
 /**
  * Dynamic delegate called when a component overlaps with the sphere collider.
  */
