@@ -6,7 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Grabber.h"
+#include "PlayerInteractComponent.h"
 
 
 // Sets default values
@@ -33,8 +33,8 @@ APhasmusPlayerCharacter::APhasmusPlayerCharacter()
 	FirstPersonMesh->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
 	FirstPersonMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	Grabber = CreateDefaultSubobject<UGrabber>(TEXT("Grabber"));
-	Grabber->SetupAttachment(FirstPersonCameraComponent);
+	InteractComponent = CreateDefaultSubobject<UPlayerInteractComponent>(TEXT("Interact Component"));
+	InteractComponent->SetupAttachment(FirstPersonCameraComponent);
 
 	// Set up third-person mesh
 	GetMesh()->SetOwnerNoSee(true);
