@@ -5,19 +5,19 @@
 #include "CoreMinimal.h"
 #include "Components/SphereComponent.h"
 #include "Phasmus/PhasmusPlayerCharacter.h"
-#include "InteractComponent.generated.h"
+#include "InteractableComponent.generated.h"
 
 // TODO: Rename to FOnPickUp once there is no conflict.
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteract, APhasmusPlayerCharacter*, PickUpCharacter);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class PHASMUS_API UInteractComponent : public USphereComponent
+class PHASMUS_API UInteractableComponent : public USphereComponent
 {
 	GENERATED_BODY()
 
 public:
 
-	UInteractComponent();
+	UInteractableComponent();
 
 	//UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnInteract OnInteract;
