@@ -6,7 +6,10 @@
 #include "GameFramework/Character.h"
 #include "PhasmusPlayerCharacter.generated.h"
 
+class APhasmusPlayerController;
+
 class UCameraComponent;
+class UHeadsUpDisplay;
 class USkeletalMeshComponent;
 
 UCLASS(config=Game)
@@ -23,6 +26,9 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
 
+	APhasmusPlayerController* Controller;
+	void AssignPlayerController();
+
 	// Handles moving forward/backward
 	void MoveForward(float Value);
 	// Handles strafing movement, left and right
@@ -36,8 +42,12 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 	float LookSensitivity = 0.4f;
 
 public:
-	// Sets default values for this character's properties
+    // Sets default values for this character's properties
 	APhasmusPlayerCharacter();
+
+    void SetUpFirstPerson();
+    void SetUpThirdPerson();
+    void SetUpGameplay();
 
 protected:
 	// Called when the game starts or when spawned
@@ -50,4 +60,5 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UHeadsUpDisplay* GetHUD();
 };
