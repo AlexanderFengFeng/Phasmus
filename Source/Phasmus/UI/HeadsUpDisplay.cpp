@@ -10,7 +10,7 @@ bool UHeadsUpDisplay::Initialize()
     if (!Super::Initialize()) return false;
     if (InteractPrompt != nullptr)
     {
-        UpdateInteractPromptVisibility(true);
+        UpdateInteractPromptVisibility(false);
     }
     return true;
 }
