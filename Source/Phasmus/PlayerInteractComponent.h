@@ -17,7 +17,7 @@ class PHASMUS_API UPlayerInteractComponent : public USphereComponent
 
 	UPROPERTY(EditAnywhere, Category = Components)
 	class UCameraComponent* FirstPersonCameraComponent;
-	AActor* Owner;
+	class APhasmusPlayerCharacter* PlayerOwner;
 
 	void LookForInteractable();
 
@@ -26,6 +26,8 @@ class PHASMUS_API UPlayerInteractComponent : public USphereComponent
 
 	UFUNCTION()
 	void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	TSet<class AInteractable*> OverlappedActors;
 
 public:
 	// Sets default values for this component's properties

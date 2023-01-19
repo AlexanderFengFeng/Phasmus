@@ -5,6 +5,9 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
+#include "Interactables/Interactable.h"
+#include "PhasmusPlayerCharacter.h"
+#include "UI/HeadsUpDisplay.h"
 
 // Sets default values for this component's properties
 UPlayerInteractComponent::UPlayerInteractComponent()
@@ -14,11 +17,6 @@ UPlayerInteractComponent::UPlayerInteractComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	SetGenerateOverlapEvents(true);
 
-	Owner = GetOwner();
-	if (Owner != nullptr)
-	{
-		FirstPersonCameraComponent = Owner->FindComponentByClass<UCameraComponent>();
-	}
 	OnComponentBeginOverlap.AddDynamic(this, &UPlayerInteractComponent::OnSphereBeginOverlap);
     OnComponentEndOverlap.AddDynamic(this, &UPlayerInteractComponent::OnSphereEndOverlap);
 }
@@ -26,7 +24,12 @@ UPlayerInteractComponent::UPlayerInteractComponent()
 // Called when the game starts
 void UPlayerInteractComponent::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
+	PlayerOwner = Cast<APhasmusPlayerCharacter>(GetOwner());
+	if (PlayerOwner != nullptr)
+	{
+		FirstPersonCameraComponent = PlayerOwner->FindComponentByClass<UCameraComponent>();
+	}
 }
 
 // Called every frame
@@ -66,7 +69,17 @@ void UPlayerInteractComponent::LookForInteractable()
  */
 void UPlayerInteractComponent::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (PlayerOwner == nullptr) return;
 
+	if (AInteractable* Interactable = Cast<AInteractable>(OtherActor))
+	{
+		OverlappedActors.Add(Interactable);
+		auto HUD = PlayerOwner->GetHUD();
+		if (HUD != nullptr)
+		{
+			HUD->UpdateInteractPromptVisibility(true);
+		}
+	}
 }
 
 /**
@@ -74,5 +87,20 @@ void UPlayerInteractComponent::OnSphereBeginOverlap(UPrimitiveComponent* Overlap
  */
 void UPlayerInteractComponent::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (PlayerOwner == nullptr) return;
+
+	if (AInteractable* Interactable = Cast<AInteractable>(OtherActor))
+	{
+		if (!OverlappedActors.Contains(Interactable)) return;
+		OverlappedActors.Remove(Interactable);
+	}
+	if (OverlappedActors.IsEmpty())
+	{
+		auto HUD = PlayerOwner->GetHUD();
+		if (HUD != nullptr)
+		{
+		    HUD->UpdateInteractPromptVisibility(false);
+		}
+	}
 
 }
