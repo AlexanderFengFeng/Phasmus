@@ -4,7 +4,6 @@
 #include "HeadsUpDisplay.h"
 
 #include "Components/TextBlock.h"
-#include "Math/Color.h"
 
 bool UHeadsUpDisplay::Initialize()
 {
