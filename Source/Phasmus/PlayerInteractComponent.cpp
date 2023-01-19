@@ -4,6 +4,7 @@
 #include "PlayerInteractComponent.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values for this component's properties
 UPlayerInteractComponent::UPlayerInteractComponent()
@@ -11,11 +12,15 @@ UPlayerInteractComponent::UPlayerInteractComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+	SetGenerateOverlapEvents(true);
+
 	Owner = GetOwner();
 	if (Owner != nullptr)
 	{
 		FirstPersonCameraComponent = Owner->FindComponentByClass<UCameraComponent>();
 	}
+	OnComponentBeginOverlap.AddDynamic(this, &UPlayerInteractComponent::OnSphereBeginOverlap);
+    OnComponentEndOverlap.AddDynamic(this, &UPlayerInteractComponent::OnSphereEndOverlap);
 }
 
 // Called when the game starts
@@ -28,7 +33,7 @@ void UPlayerInteractComponent::BeginPlay()
 void UPlayerInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	LookForInteractable();
+	//LookForInteractable();
 }
 
 void UPlayerInteractComponent::LookForInteractable()
@@ -45,7 +50,7 @@ void UPlayerInteractComponent::LookForInteractable()
 
 	FHitResult HitResult;
 	FCollisionQueryParams CollisionParams;
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams))
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_GameTraceChannel1, CollisionParams))
 	{
 	    if (GEngine)
 	    {
@@ -54,4 +59,20 @@ void UPlayerInteractComponent::LookForInteractable()
 			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Normal Point: %s"), *HitResult.ImpactNormal.ToString()));
 	    }
 	}
+}
+
+/**
+ * Dynamic delegate called when a component overlaps with the sphere collider.
+ */
+void UPlayerInteractComponent::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+}
+
+/**
+ * Dynamic delegate called when a component stops overlapping with the sphere collider.
+ */
+void UPlayerInteractComponent::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+
 }

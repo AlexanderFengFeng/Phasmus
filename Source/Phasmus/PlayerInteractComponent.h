@@ -3,22 +3,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/SceneComponent.h"
+#include "Components/SphereComponent.h"
 #include "PlayerInteractComponent.generated.h"
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class PHASMUS_API UPlayerInteractComponent : public USceneComponent
+class PHASMUS_API UPlayerInteractComponent : public USphereComponent
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere)
 	float InteractDistance = 125.f;
 
+	UPROPERTY(EditAnywhere, Category = Components)
 	class UCameraComponent* FirstPersonCameraComponent;
 	AActor* Owner;
 
 	void LookForInteractable();
+
+	UFUNCTION()
+	void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 public:
 	// Sets default values for this component's properties
