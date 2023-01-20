@@ -14,7 +14,7 @@ class PHASMUS_API UPlayerInteractComponent : public USphereComponent
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere)
-	float DetectionRadius = 40.f;
+	float DetectionRadius = 30.f;
 
 	UPROPERTY(EditAnywhere, Category = Components)
 	class UCameraComponent* FirstPersonCameraComponent;
