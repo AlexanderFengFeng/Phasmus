@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
 #include "Phasmus/PhasmusPlayerCharacter.h"
 #include "InteractableComponent.generated.h"
 
@@ -11,7 +11,7 @@
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteract, APhasmusPlayerCharacter*, PickUpCharacter);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class PHASMUS_API UInteractableComponent : public USphereComponent
+class PHASMUS_API UInteractableComponent : public UBoxComponent
 {
 	GENERATED_BODY()
 
