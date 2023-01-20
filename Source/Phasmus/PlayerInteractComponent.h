@@ -6,6 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "PlayerInteractComponent.generated.h"
 
+class AInteractable;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class PHASMUS_API UPlayerInteractComponent : public USphereComponent
@@ -13,13 +14,11 @@ class PHASMUS_API UPlayerInteractComponent : public USphereComponent
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere)
-	float InteractDistance = 125.f;
+	float DetectionRadius = 40.f;
 
 	UPROPERTY(EditAnywhere, Category = Components)
 	class UCameraComponent* FirstPersonCameraComponent;
 	class APhasmusPlayerCharacter* PlayerOwner;
-
-	void LookForInteractable();
 
 	UFUNCTION()
 	void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -27,7 +26,10 @@ class PHASMUS_API UPlayerInteractComponent : public USphereComponent
 	UFUNCTION()
 	void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	TSet<class AInteractable*> OverlappedActors;
+	TSet<AInteractable*> OverlappedInteractables;
+	bool HasClearLineOfSight(AActor* OtherActor, float& OutDistance);
+	AInteractable* ChosenInteractable;
+	AInteractable* GetClosestInteractable();
 
 public:
 	// Sets default values for this component's properties
@@ -36,6 +38,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+    bool ShowInteractPromptIfNeeded();
 
 public:
 	// Called every frame

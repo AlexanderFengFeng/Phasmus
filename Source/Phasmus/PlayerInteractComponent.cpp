@@ -16,6 +16,7 @@ UPlayerInteractComponent::UPlayerInteractComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	SetGenerateOverlapEvents(true);
+	SphereRadius = DetectionRadius;
 
 	OnComponentBeginOverlap.AddDynamic(this, &UPlayerInteractComponent::OnSphereBeginOverlap);
     OnComponentEndOverlap.AddDynamic(this, &UPlayerInteractComponent::OnSphereEndOverlap);
@@ -36,32 +37,24 @@ void UPlayerInteractComponent::BeginPlay()
 void UPlayerInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	//LookForInteractable();
+	ChosenInteractable = GetClosestInteractable();
+	if (ShowInteractPromptIfNeeded()) return;
 }
 
-void UPlayerInteractComponent::LookForInteractable()
+bool UPlayerInteractComponent::ShowInteractPromptIfNeeded()
 {
-	if (FirstPersonCameraComponent == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Error: First-person camera component is required"));
-		return;
-	}
-	FVector Start = FirstPersonCameraComponent->GetComponentLocation();
-	FVector ForwardVector = FirstPersonCameraComponent->GetForwardVector();
-	FVector End = Start + (ForwardVector * InteractDistance);
-	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
+    if (PlayerOwner == nullptr) return true;
+    UHeadsUpDisplay* HUD = PlayerOwner->GetHUD();
 
-	FHitResult HitResult;
-	FCollisionQueryParams CollisionParams;
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_GameTraceChannel1, CollisionParams))
-	{
-	    if (GEngine)
-	    {
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *HitResult.GetActor()->GetName()));
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Impact Point: %s"), *HitResult.ImpactPoint.ToString()));
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Normal Point: %s"), *HitResult.ImpactNormal.ToString()));
-	    }
-	}
+    if (ChosenInteractable != nullptr && HUD != nullptr)
+    {
+        HUD->UpdateInteractPromptVisibility(true);
+    }
+    else if (HUD != nullptr)
+    {
+        HUD->UpdateInteractPromptVisibility(false);
+    }
+    return false;
 }
 
 /**
@@ -73,12 +66,7 @@ void UPlayerInteractComponent::OnSphereBeginOverlap(UPrimitiveComponent* Overlap
 
 	if (AInteractable* Interactable = Cast<AInteractable>(OtherActor))
 	{
-		OverlappedActors.Add(Interactable);
-		auto HUD = PlayerOwner->GetHUD();
-		if (HUD != nullptr)
-		{
-			HUD->UpdateInteractPromptVisibility(true);
-		}
+		OverlappedInteractables.Add(Interactable);
 	}
 }
 
@@ -91,16 +79,45 @@ void UPlayerInteractComponent::OnSphereEndOverlap(UPrimitiveComponent* Overlappe
 
 	if (AInteractable* Interactable = Cast<AInteractable>(OtherActor))
 	{
-		if (!OverlappedActors.Contains(Interactable)) return;
-		OverlappedActors.Remove(Interactable);
+		if (!OverlappedInteractables.Contains(Interactable)) return;
+		OverlappedInteractables.Remove(Interactable);
 	}
-	if (OverlappedActors.IsEmpty())
-	{
-		auto HUD = PlayerOwner->GetHUD();
-		if (HUD != nullptr)
-		{
-		    HUD->UpdateInteractPromptVisibility(false);
-		}
-	}
+}
 
+bool UPlayerInteractComponent::HasClearLineOfSight(AActor* OtherActor, float& OutDistance)
+{
+	if (FirstPersonCameraComponent == nullptr || OtherActor == nullptr) return false;
+
+	FVector Start = FirstPersonCameraComponent->GetComponentLocation();
+	FVector End = OtherActor->GetActorLocation();
+	OutDistance = FVector::Dist(Start, End);
+
+	FHitResult HitResult;
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(PlayerOwner); // Ignore Actor1 in the trace
+	QueryParams.AddIgnoredActor(OtherActor); // Ignore Actor2 in the trace
+
+	return GetWorld()->LineTraceSingleByChannel(HitResult, Start, End,
+		                                        ECC_Visibility, QueryParams);
+}
+
+AInteractable* UPlayerInteractComponent::GetClosestInteractable()
+{
+	if (OverlappedInteractables.IsEmpty()) return nullptr;
+
+	AInteractable* CurrentClosest = nullptr;
+	float MinDistance = MAX_int8;
+	for (AInteractable* Interactable : OverlappedInteractables)
+	{
+		float OutDistance = MAX_int8;
+	    if (HasClearLineOfSight(Interactable, OutDistance))
+	    {
+	        if (OutDistance < MinDistance)
+	        {
+				MinDistance = OutDistance;
+				CurrentClosest = Interactable;
+	        }
+	    }
+	}
+	return CurrentClosest;
 }
