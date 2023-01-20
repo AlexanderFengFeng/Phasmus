@@ -11,8 +11,8 @@ AItem::AItem()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	HeldItemComponent = CreateDefaultSubobject<UHeldItemComponent>(TEXT("Held Item Component"));
-	//PickUpComponent = CreateDefaultSubobject<UPickUpComponent>(TEXT("Pick Up Component"));
+	HeldItemComponent = CreateDefaultSubobject<UHeldItemComponent>(TEXT("HeldItemComponent"));
+	//PickUpComponent = CreateDefaultSubobject<UPickUpComponent>(TEXT("PickUpComponent"));
 }
 
 // Called when the game starts or when spawned

@@ -10,7 +10,7 @@ UHeldItemComponent::UHeldItemComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	FirstPersonStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("First-Person Static Mesh"));
+	FirstPersonStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FirstPersonStaticMesh"));
 	//FirstPersonStaticMesh->SetupAttachment(this);
 }
 

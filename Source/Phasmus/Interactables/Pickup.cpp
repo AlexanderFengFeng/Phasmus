@@ -7,9 +7,9 @@
 // Sets default values
 APickup::APickup()
 {
-	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Collider"));
+	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	SetRootComponent(SphereComponent);
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	StaticMesh->SetupAttachment(SphereComponent);
 
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &APickup::OnSphereBeginOverlap);
