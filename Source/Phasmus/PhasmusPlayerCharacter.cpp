@@ -141,13 +141,5 @@ void APhasmusPlayerCharacter::Interact()
 UHeadsUpDisplay* APhasmusPlayerCharacter::GetHUD()
 {
     AssignPlayerController();
-    if (Controller != nullptr)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Controller: %s"), *Controller->GetName());
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No controller!"));
-    }
     return Controller != nullptr ? Controller->GetHUD() : nullptr;
 }

@@ -65,6 +65,7 @@ void UPlayerInteractComponent::OnSphereBeginOverlap(UPrimitiveComponent* Overlap
 
 	if (AInteractable* Interactable = Cast<AInteractable>(OtherActor))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Adding: %s"), *OtherActor->GetName());
 		OverlappedInteractables.Add(Interactable);
 	}
 }
@@ -79,6 +80,7 @@ void UPlayerInteractComponent::OnSphereEndOverlap(UPrimitiveComponent* Overlappe
 	if (AInteractable* Interactable = Cast<AInteractable>(OtherActor))
 	{
 		if (!OverlappedInteractables.Contains(Interactable)) return;
+		UE_LOG(LogTemp, Warning, TEXT("Removing: %s"), *OtherActor->GetName());
 		OverlappedInteractables.Remove(Interactable);
 	}
 }
@@ -90,14 +92,22 @@ bool UPlayerInteractComponent::HasClearLineOfSight(AActor* OtherActor, float& Ou
 	FVector Start = FirstPersonCameraComponent->GetComponentLocation();
 	FVector End = OtherActor->GetActorLocation();
 	OutDistance = FVector::Dist(Start, End);
+	UE_LOG(LogTemp, Warning, TEXT("Dist: %f"), OutDistance);
 
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(PlayerOwner); // Ignore Actor1 in the trace
-	QueryParams.AddIgnoredActor(OtherActor); // Ignore Actor2 in the trace
-
-	return GetWorld()->LineTraceSingleByChannel(HitResult, Start, End,
-		                                        ECC_Visibility, QueryParams);
+	//QueryParams.AddIgnoredActor(PlayerOwner); // Ignore player.
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End,
+		                                        ECC_Visibility, QueryParams))
+	{
+		return true;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No HitResult"));
+		return false;
+	}
 }
 
 AInteractable* UPlayerInteractComponent::GetClosestInteractable()
@@ -112,12 +122,21 @@ AInteractable* UPlayerInteractComponent::GetClosestInteractable()
 		float OutDistance = MAX_int8;
 	    if (HasClearLineOfSight(Interactable, OutDistance))
 	    {
+			UE_LOG(LogTemp, Warning, TEXT("Hitting here instead"));
 	        if (OutDistance < MinDistance)
 	        {
 				MinDistance = OutDistance;
 				CurrentClosest = Interactable;
 	        }
 	    }
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No LOS"));
+		}
+	}
+	if (CurrentClosest != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Interactable: %s"), *CurrentClosest->GetName());
 	}
 	return CurrentClosest;
 }
