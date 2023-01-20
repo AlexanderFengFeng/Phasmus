@@ -41,11 +41,15 @@ void APhasmusPlayerCharacter::SetUpFirstPerson()
     InteractComponent->SetupAttachment(FirstPersonCameraComponent);
 }
 
+// Sets up third-person mesh.
 void APhasmusPlayerCharacter::SetUpThirdPerson()
 {
-    // Set up third-person mesh
-    GetMesh()->SetOwnerNoSee(true);
-    GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    USkeletalMeshComponent* ThirdPersonMesh = GetMesh();
+    if (ThirdPersonMesh != nullptr)
+    {
+        ThirdPersonMesh->SetOwnerNoSee(true);
+        ThirdPersonMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    }
 }
 
 void APhasmusPlayerCharacter::SetUpGameplay()
