@@ -17,6 +17,8 @@ bool UHeadsUpDisplay::Initialize()
 
 void UHeadsUpDisplay::UpdateInteractPromptVisibility(bool bMakeVisible)
 {
-    if (InteractPrompt != nullptr) return;
-    InteractPrompt->SetOpacity(bMakeVisible ? 1.0f : 0.f);
+    if (InteractPrompt != nullptr)
+    {
+        InteractPrompt->SetOpacity(bMakeVisible ? 1.0f : 0.f);
+    }
 }
