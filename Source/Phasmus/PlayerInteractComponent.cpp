@@ -38,12 +38,12 @@ void UPlayerInteractComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	ChosenInteractable = GetClosestInteractable();
-	if (ShowInteractPromptIfNeeded()) return;
+	ShowInteractPromptIfNeeded();
 }
 
-bool UPlayerInteractComponent::ShowInteractPromptIfNeeded()
+void UPlayerInteractComponent::ShowInteractPromptIfNeeded()
 {
-    if (PlayerOwner == nullptr) return true;
+    if (PlayerOwner == nullptr) return;
     UHeadsUpDisplay* HUD = PlayerOwner->GetHUD();
 
     if (ChosenInteractable != nullptr && HUD != nullptr)
@@ -54,7 +54,6 @@ bool UPlayerInteractComponent::ShowInteractPromptIfNeeded()
     {
         HUD->UpdateInteractPromptVisibility(false);
     }
-    return false;
 }
 
 /**
@@ -109,6 +108,7 @@ AInteractable* UPlayerInteractComponent::GetClosestInteractable()
 	float MinDistance = MAX_int8;
 	for (AInteractable* Interactable : OverlappedInteractables)
 	{
+		if (Interactable == nullptr) continue;
 		float OutDistance = MAX_int8;
 	    if (HasClearLineOfSight(Interactable, OutDistance))
 	    {
