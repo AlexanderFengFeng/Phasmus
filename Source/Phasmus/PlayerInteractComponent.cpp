@@ -41,6 +41,11 @@ void UPlayerInteractComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	// because if an overlap is maintained, and the trace is obstructed, then we must update the
 	// interact prompt to reflect that the interactable is no longer in LOS.
 	ChosenInteractable = GetClosestInteractable();
+	if (ChosenInteractable != nullptr)
+	{
+	    DrawDebugLine(GetWorld(), GetComponentLocation(), ChosenInteractable->GetActorLocation(), FColor::Red, false, 1, 0, 1);
+	    
+	}
 	ShowInteractPromptIfNeeded();
 }
 
@@ -91,7 +96,7 @@ void UPlayerInteractComponent::OnSphereEndOverlap(UPrimitiveComponent* Overlappe
  *
  * Only considers a valid line if there is no other actor blocking the line trace.
  * @param OtherActor The other actor to check LOS.
- * @param OutDistance The distance between the camera and the other actor.
+ * @param OutDistance The distance between the interact component and other actor.
  */
 bool UPlayerInteractComponent::HasClearLineOfSight(AActor* OtherActor, float& OutDistance)
 {
@@ -99,13 +104,14 @@ bool UPlayerInteractComponent::HasClearLineOfSight(AActor* OtherActor, float& Ou
 
 	FVector Start = FirstPersonCameraComponent->GetComponentLocation();
 	FVector End = OtherActor->GetActorLocation();
-	OutDistance = FVector::Dist(Start, End);
+	// Compare by distance between this interact component and the other actor.
+	OutDistance = FVector::Dist(GetComponentLocation(), End);
 
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(PlayerOwner);
 
-	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
+	DrawDebugLine(GetWorld(), GetComponentLocation(), End, FColor::Green, false, 1, 0, 1);
 	if (GetWorld()->LineTraceSingleByChannel(
 		HitResult, Start, End, ECC_Visibility))
 	{
@@ -114,9 +120,7 @@ bool UPlayerInteractComponent::HasClearLineOfSight(AActor* OtherActor, float& Ou
 		{
 		    return true;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Type of: %s"), *HitActor->GetName());
 	}
-	UE_LOG(LogTemp, Warning, TEXT("No HitResult"));
 	return false;
 }
 
