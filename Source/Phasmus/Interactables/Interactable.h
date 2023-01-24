@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Interactable.generated.h"
 
+class APhasmusPlayerCharacter;
+
 UCLASS()
 class PHASMUS_API AInteractable : public AActor
 {
@@ -30,4 +32,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void HandleInteraction(APhasmusPlayerCharacter* PlayerCharacter) PURE_VIRTUAL(AInteractable::HandleInteraction, return;);
 };
