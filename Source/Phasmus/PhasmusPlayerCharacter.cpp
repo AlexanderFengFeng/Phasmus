@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Interactables/Interactable.h"
 #include "PhasmusPlayerController.h"
 #include "PlayerInteractComponent.h"
 #include "UI/HeadsUpDisplay.h"
@@ -135,7 +136,12 @@ void APhasmusPlayerCharacter::LookRight(float Value)
 
 void APhasmusPlayerCharacter::Interact()
 {
-    // TODO: Write me.
+    
+    AInteractable* ChosenInteractable = InteractComponent->GetChosenInteractable();
+    if (ChosenInteractable != nullptr)
+    {
+        ChosenInteractable->HandleInteraction(this);
+    }
 }
 
 UHeadsUpDisplay* APhasmusPlayerCharacter::GetHUD()
