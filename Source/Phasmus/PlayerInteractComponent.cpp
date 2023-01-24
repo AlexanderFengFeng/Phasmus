@@ -37,6 +37,9 @@ void UPlayerInteractComponent::BeginPlay()
 void UPlayerInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	// The reason we parse for interactables on every frame instead of relying on overlaps is
+	// because if an overlap is maintained, and the trace is obstructed, then we must update the
+	// interact prompt to reflect that the interactable is no longer in LOS.
 	ChosenInteractable = GetClosestInteractable();
 	ShowInteractPromptIfNeeded();
 }
@@ -83,6 +86,13 @@ void UPlayerInteractComponent::OnSphereEndOverlap(UPrimitiveComponent* Overlappe
 	}
 }
 
+/**
+ * Whether there is a clear LOS between the component's camera and another actor.
+ *
+ * Only considers a valid line if there is no other actor blocking the line trace.
+ * @param OtherActor The other actor to check LOS.
+ * @param OutDistance The distance between the camera and the other actor.
+ */
 bool UPlayerInteractComponent::HasClearLineOfSight(AActor* OtherActor, float& OutDistance)
 {
 	if (FirstPersonCameraComponent == nullptr || OtherActor == nullptr) return false;
@@ -110,6 +120,10 @@ bool UPlayerInteractComponent::HasClearLineOfSight(AActor* OtherActor, float& Ou
 	return false;
 }
 
+/**
+ * Iterates through the overlapped interactables to assign the closest one, if anny.
+ * @returns A pointer to the closest interactable, or nullptr.
+ */
 AInteractable* UPlayerInteractComponent::GetClosestInteractable()
 {
 	if (OverlappedInteractables.IsEmpty()) return nullptr;
@@ -130,4 +144,10 @@ AInteractable* UPlayerInteractComponent::GetClosestInteractable()
 	    }
 	}
 	return CurrentClosest;
+}
+
+/** Getter for the chosen interactable, if any. */
+AInteractable* UPlayerInteractComponent::GetChosenInteractable()
+{
+	return ChosenInteractable;
 }
