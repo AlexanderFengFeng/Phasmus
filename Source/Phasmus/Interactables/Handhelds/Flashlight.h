@@ -14,7 +14,16 @@ class PHASMUS_API AFlashlight : public AHandheld
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere)
+	class USpotLightComponent* SpotLight;
+
+public:
+	AFlashlight();
+
+protected:
+    virtual void BeginPlay() override;
+
 public:
 	virtual void HandleAction() override;
-	
+
 };
