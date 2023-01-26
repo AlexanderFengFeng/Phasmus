@@ -37,6 +37,7 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 	void LookUp(float Value);
 	void LookRight(float Value);
 	void Interact();
+	void UseFlashlight();
 
 	UPROPERTY(EditAnywhere)
 	float LookSensitivity = 0.4f;

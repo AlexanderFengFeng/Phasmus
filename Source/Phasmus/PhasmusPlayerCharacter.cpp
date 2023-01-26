@@ -97,7 +97,7 @@ void APhasmusPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	// Bind action events
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APhasmusPlayerCharacter::Interact);
+	PlayerInputComponent->BindAction("PrimaryAction", IE_Pressed, this, &APhasmusPlayerCharacter::Interact);
 
 	// Bind movement events
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &APhasmusPlayerCharacter::MoveForward);
@@ -143,6 +143,12 @@ void APhasmusPlayerCharacter::Interact()
         ChosenInteractable->HandleInteraction(this);
     }
 }
+
+void APhasmusPlayerCharacter::UseFlashlight()
+{
+    
+}
+
 
 UHeadsUpDisplay* APhasmusPlayerCharacter::GetHUD()
 {
