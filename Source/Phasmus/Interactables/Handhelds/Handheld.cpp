@@ -11,3 +11,8 @@ AHandheld::AHandheld()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	SetRootComponent(StaticMesh);
 }
+
+void AHandheld::BeginPlay()
+{
+	Super::BeginPlay();
+}

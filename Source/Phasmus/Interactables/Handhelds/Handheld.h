@@ -12,14 +12,16 @@ class PHASMUS_API AHandheld : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* StaticMesh;
-
 public:	
 	// Sets default values for this component's properties
 	AHandheld();
 
-	virtual void HandleAction() PURE_VIRTUAL(AHandheld::HandleAction, return;);
+protected:
+	virtual void BeginPlay() override;
 
-		
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* StaticMesh;
+
+public:
+	virtual void HandleAction() PURE_VIRTUAL(AHandheld::HandleAction, return;);
 };
