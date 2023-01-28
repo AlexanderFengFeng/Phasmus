@@ -146,9 +146,8 @@ void APhasmusPlayerCharacter::Interact()
 
 void APhasmusPlayerCharacter::UseFlashlight()
 {
-    
+    OnUseFlashlight.Broadcast();
 }
-
 
 UHeadsUpDisplay* APhasmusPlayerCharacter::GetHUD()
 {

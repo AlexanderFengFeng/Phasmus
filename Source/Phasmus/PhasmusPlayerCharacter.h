@@ -7,10 +7,13 @@
 #include "PhasmusPlayerCharacter.generated.h"
 
 class APhasmusPlayerController;
+//class AFlashlight;
 
 class UCameraComponent;
 class UHeadsUpDisplay;
 class USkeletalMeshComponent;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUseFlashlight);
 
 UCLASS(config=Game)
 class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
@@ -25,6 +28,8 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
+
+	//AFlashlight* Flashlight;
 
 	APhasmusPlayerController* Controller;
 	void AssignPlayerController();
@@ -62,4 +67,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UHeadsUpDisplay* GetHUD();
+
+	UPROPERTY(BlueprintAssignable, Category = Interaction)
+	FOnUseFlashlight OnUseFlashlight;
 };
