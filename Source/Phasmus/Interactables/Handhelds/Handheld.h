@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Handheld.generated.h"
 
+class APhasmusPlayerCharacter;
 
 UCLASS()
 class PHASMUS_API AHandheld : public AActor
@@ -17,6 +18,8 @@ public:
 	AHandheld();
 
 protected:
+	APhasmusPlayerCharacter* Character;
+
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
@@ -24,4 +27,5 @@ protected:
 
 public:
 	virtual void HandleAction() PURE_VIRTUAL(AHandheld::HandleAction, return;);
+	virtual void BindAction(APhasmusPlayerCharacter* TargetCharacter) PURE_VIRTUAL(AHandheld::BindAction, return;);
 };

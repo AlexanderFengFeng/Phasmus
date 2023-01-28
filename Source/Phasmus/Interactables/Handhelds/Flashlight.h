@@ -6,6 +6,8 @@
 #include "Handheld.h"
 #include "Flashlight.generated.h"
 
+class APhasmusPlayerCharacter;
+
 /**
  * 
  */
@@ -25,5 +27,5 @@ protected:
 
 public:
 	virtual void HandleAction() override;
-
+	virtual void BindAction(APhasmusPlayerCharacter* TargetCharacter) override;
 };

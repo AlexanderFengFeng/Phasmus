@@ -4,6 +4,7 @@
 #include "Flashlight.h"
 #include "Components/PointLightComponent.h"
 #include "Components/SpotLightComponent.h"
+#include "../../PhasmusPlayerCharacter.h"
 
 AFlashlight::AFlashlight()
 {
@@ -19,4 +20,13 @@ void AFlashlight::BeginPlay()
 void AFlashlight::HandleAction()
 {
     
+}
+
+void AFlashlight::BindAction(APhasmusPlayerCharacter* TargetCharacter)
+{
+    Character = TargetCharacter;
+    if (Character != nullptr)
+    {
+        Character->OnUseFlashlight.AddDynamic(this, &AFlashlight::HandleAction);
+    }
 }
