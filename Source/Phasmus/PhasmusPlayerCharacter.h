@@ -29,7 +29,9 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
 
-	//AFlashlight* Flashlight;
+	/** Move after prototyping */
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AFlashlight> FlashlightClass;
 
 	APhasmusPlayerController* Controller;
 	void AssignPlayerController();

@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interactables/Interactable.h"
+#include "Interactables/Handhelds/Flashlight.h"
 #include "PhasmusPlayerController.h"
 #include "PlayerInteractComponent.h"
 #include "UI/HeadsUpDisplay.h"
@@ -72,6 +73,15 @@ void APhasmusPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
     AssignPlayerController();
+    // Prototyping
+    if (FlashlightClass != nullptr)
+    {
+        FActorSpawnParameters ActorSpawnParams;
+        AFlashlight* Flashlight = GetWorld()->SpawnActor<AFlashlight>(FlashlightClass, GetActorLocation(), GetActorRotation(), ActorSpawnParams);
+        FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+        //Flashlight->AttachToComponent(FirstPersonMesh, AttachmentRules, FName(TEXT("GripPoint")));
+        Flashlight->BindAction(this);
+    }
 }
 
 void APhasmusPlayerCharacter::AssignPlayerController()
@@ -97,7 +107,8 @@ void APhasmusPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	// Bind action events
-	PlayerInputComponent->BindAction("PrimaryAction", IE_Pressed, this, &APhasmusPlayerCharacter::Interact);
+    PlayerInputComponent->BindAction("PrimaryAction", IE_Pressed, this, &APhasmusPlayerCharacter::Interact);
+    PlayerInputComponent->BindAction("Flashlight", IE_Pressed, this, &APhasmusPlayerCharacter::UseFlashlight);
 
 	// Bind movement events
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &APhasmusPlayerCharacter::MoveForward);
