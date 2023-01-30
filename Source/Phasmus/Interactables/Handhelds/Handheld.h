@@ -26,6 +26,7 @@ protected:
 	UStaticMeshComponent* StaticMesh;
 
 public:
+	UFUNCTION()
 	virtual void HandleAction() PURE_VIRTUAL(AHandheld::HandleAction, return;);
 	virtual void BindAction(APhasmusPlayerCharacter* TargetCharacter) PURE_VIRTUAL(AHandheld::BindAction, return;);
 };

@@ -15,11 +15,24 @@ AFlashlight::AFlashlight()
 void AFlashlight::BeginPlay()
 {
     Super::BeginPlay();
+    bIsOn = false;
+    SpotLight->SetVisibility(false);
 }
 
 void AFlashlight::HandleAction()
 {
-    
+    if (SpotLight == nullptr) return;
+
+    if (bIsOn)
+    {
+        bIsOn = false;
+        SpotLight->SetVisibility(false);
+    }
+    else
+    {
+        bIsOn = true;
+        SpotLight->SetVisibility(true);
+    }
 }
 
 void AFlashlight::BindAction(APhasmusPlayerCharacter* TargetCharacter)

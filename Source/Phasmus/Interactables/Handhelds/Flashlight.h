@@ -19,6 +19,8 @@ class PHASMUS_API AFlashlight : public AHandheld
 	UPROPERTY(EditAnywhere)
 	class USpotLightComponent* SpotLight;
 
+	bool bIsOn = false;
+
 public:
 	AFlashlight();
 
