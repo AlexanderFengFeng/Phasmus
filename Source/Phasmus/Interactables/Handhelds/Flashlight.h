@@ -26,6 +26,7 @@ public:
 
 protected:
     virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
 
 public:
 	virtual void HandleAction() override;

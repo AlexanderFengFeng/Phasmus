@@ -15,6 +15,11 @@ AFlashlight::AFlashlight()
 void AFlashlight::BeginPlay()
 {
     Super::BeginPlay();
+}
+
+void AFlashlight::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
     bIsOn = false;
     SpotLight->SetVisibility(false);
 }
