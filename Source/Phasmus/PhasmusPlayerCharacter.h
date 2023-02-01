@@ -23,15 +23,17 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, Category = Mesh)
 	USkeletalMeshComponent* FirstPersonMesh;
 
+	UPROPERTY(EditAnywhere, Category = Mesh)
+	USceneComponent* LeftHandAnchor;
+	UPROPERTY(EditAnywhere, Category = Mesh)
+	USceneComponent* RightHandAnchor;
+
+
 	UPROPERTY(EditAnywhere, Category = Gameplay)
 	class UPlayerInteractComponent* InteractComponent;
 
 	UPROPERTY(EditAnywhere, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
-
-	/** Move after prototyping */
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AFlashlight> FlashlightClass;
 
 	APhasmusPlayerController* Controller;
 	void AssignPlayerController();
@@ -61,7 +63,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -72,4 +74,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = Interaction)
 	FOnUseFlashlight OnUseFlashlight;
+
+	USceneComponent* GetLeftHandAnchor() const { return LeftHandAnchor; }
+	USceneComponent* GetRightHandAnchor() const { return RightHandAnchor; }
 };

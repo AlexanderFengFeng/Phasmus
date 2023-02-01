@@ -7,7 +7,6 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interactables/Interactable.h"
-#include "Interactables/Handhelds/Flashlight.h"
 #include "PhasmusPlayerController.h"
 #include "PlayerInteractComponent.h"
 #include "UI/HeadsUpDisplay.h"
@@ -38,6 +37,13 @@ void APhasmusPlayerCharacter::SetUpFirstPerson()
     FirstPersonMesh->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
     FirstPersonMesh->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
     FirstPersonMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+    LeftHandAnchor = CreateDefaultSubobject<USceneComponent>(TEXT("LeftHandAnchor"));
+    LeftHandAnchor->SetupAttachment(FirstPersonCameraComponent);
+    LeftHandAnchor->SetRelativeLocation(FVector(30.f, -30.f, -25.f));
+    RightHandAnchor = CreateDefaultSubobject<USceneComponent>(TEXT("RightHandAnchor"));
+    RightHandAnchor->SetupAttachment(FirstPersonCameraComponent);
+    RightHandAnchor->SetRelativeLocation(FVector(30.f, 30.f, -25.f));
 
     InteractComponent = CreateDefaultSubobject<UPlayerInteractComponent>(TEXT("Interact Component"));
     InteractComponent->SetupAttachment(FirstPersonCameraComponent);
@@ -73,15 +79,6 @@ void APhasmusPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
     AssignPlayerController();
-    // Prototyping
-    if (FlashlightClass != nullptr)
-    {
-        FActorSpawnParameters ActorSpawnParams;
-        AFlashlight* Flashlight = GetWorld()->SpawnActor<AFlashlight>(FlashlightClass, GetActorLocation(), GetActorRotation(), ActorSpawnParams);
-        FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-        //Flashlight->AttachToComponent(FirstPersonMesh, AttachmentRules, FName(TEXT("GripPoint")));
-        Flashlight->BindAction(this);
-    }
 }
 
 void APhasmusPlayerCharacter::AssignPlayerController()
