@@ -10,6 +10,7 @@ AHandheld::AHandheld()
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	SetRootComponent(StaticMesh);
+	SetActorEnableCollision(false);
 }
 
 void AHandheld::BeginPlay()
