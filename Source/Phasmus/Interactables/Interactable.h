@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../PhasmusPlayerCharacter.h"
 #include "GameFramework/Actor.h"
 #include "Interactable.generated.h"
 
 class APhasmusPlayerCharacter;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteract, APhasmusPlayerCharacter*, PlayerCharacter);
 
 UCLASS()
 class PHASMUS_API AInteractable : public AActor
@@ -25,12 +28,13 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
-	class UInteractableComponent* InteractableComponent;
+	class UBoxComponent* InteractableComponent;
     
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void HandleInteraction(APhasmusPlayerCharacter* PlayerCharacter) PURE_VIRTUAL(AInteractable::HandleInteraction, return;);
+	UPROPERTY(BlueprintAssignable, Category = Interaction)
+	FOnInteract OnInteract;
 };

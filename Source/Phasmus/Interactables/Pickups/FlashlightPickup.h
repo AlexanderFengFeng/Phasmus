@@ -3,21 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pickup.h"
+#include "../Interactable.h"
 #include "FlashlightPickup.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PHASMUS_API AFlashlightPickup : public APickup
+class PHASMUS_API AFlashlightPickup : public AInteractable
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AFlashlight> FlashlightClass;
 
-public:
-	virtual void HandleInteraction(APhasmusPlayerCharacter* PlayerCharacter) override;
+protected:
+	virtual void BeginPlay() override;
 
+public:
+	UFUNCTION()
+	void AttachFlashlightToCharacter(APhasmusPlayerCharacter* PlayerCharacter);
 };

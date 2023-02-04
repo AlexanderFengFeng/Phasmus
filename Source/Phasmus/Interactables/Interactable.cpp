@@ -2,7 +2,8 @@
 
 
 #include "Interactable.h"
-#include "InteractableComponent.h"
+#include "Components/BoxComponent.h"
+
 
 // Sets default values
 AInteractable::AInteractable()
@@ -10,7 +11,8 @@ AInteractable::AInteractable()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("InteractableComponent"));
+	InteractableComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractableComponent"));
+	InteractableComponent->SetGenerateOverlapEvents(true);
 	SetRootComponent(InteractableComponent);
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	StaticMesh->SetupAttachment(InteractableComponent);

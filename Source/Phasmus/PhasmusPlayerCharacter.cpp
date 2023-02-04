@@ -144,11 +144,10 @@ void APhasmusPlayerCharacter::LookRight(float Value)
 
 void APhasmusPlayerCharacter::Interact()
 {
-    
     AInteractable* ChosenInteractable = InteractComponent->GetChosenInteractable();
     if (ChosenInteractable != nullptr)
     {
-        ChosenInteractable->HandleInteraction(this);
+        ChosenInteractable->OnInteract.Broadcast(this);
     }
 }
 
