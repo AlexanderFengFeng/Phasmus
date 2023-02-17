@@ -5,7 +5,9 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
+#include "DrawDebugHelpers.h"
 #include "Interactables/Interactable.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "PhasmusPlayerCharacter.h"
 #include "UI/HeadsUpDisplay.h"
 
@@ -37,15 +39,7 @@ void UPlayerInteractComponent::BeginPlay()
 void UPlayerInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	// The reason we parse for interactables on every frame instead of relying on overlaps is
-	// because if an overlap is maintained, and the trace is obstructed, then we must update the
-	// interact prompt to reflect that the interactable is no longer in LOS.
-	ChosenInteractable = GetClosestInteractable();
-	if (ChosenInteractable != nullptr)
-	{
-	    DrawDebugLine(GetWorld(), GetComponentLocation(), ChosenInteractable->GetActorLocation(), FColor::Red, false, 1, 0, 1);
-	    
-	}
+	TraceForInteractable();
 	ShowInteractPromptIfNeeded();
 }
 
@@ -53,105 +47,53 @@ void UPlayerInteractComponent::ShowInteractPromptIfNeeded()
 {
     if (PlayerOwner == nullptr) return;
     UHeadsUpDisplay* HUD = PlayerOwner->GetHUD();
+	if (HUD == nullptr) return;
 
-    if (ChosenInteractable != nullptr && HUD != nullptr)
+    if (TracedInteractable != nullptr)
     {
         HUD->UpdateInteractPromptVisibility(true);
     }
-    else if (HUD != nullptr)
+    else
     {
         HUD->UpdateInteractPromptVisibility(false);
     }
 }
 
 /**
- * Dynamic delegate called when a component overlaps with the sphere collider.
- */
-void UPlayerInteractComponent::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (PlayerOwner == nullptr) return;
-
-	if (AInteractable* Interactable = Cast<AInteractable>(OtherActor))
-	{
-		OverlappedInteractables.Add(Interactable);
-	}
-}
-
-/**
- * Dynamic delegate called when a component stops overlapping with the sphere collider.
- */
-void UPlayerInteractComponent::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if (PlayerOwner == nullptr) return;
-
-	if (AInteractable* Interactable = Cast<AInteractable>(OtherActor))
-	{
-		if (!OverlappedInteractables.Contains(Interactable)) return;
-		OverlappedInteractables.Remove(Interactable);
-	}
-}
-
-/**
- * Whether there is a clear LOS between the component's camera and another actor.
+ * Traces forward from the player's camera and assigns the first AInteractable hit, if any.
  *
- * Only considers a valid line if there is no other actor blocking the line trace.
- * @param OtherActor The other actor to check LOS.
- * @param OutDistance The distance between the interact component and other actor.
+ * If nothing is hit, then nullptr is assigned to the TracedInteractable.
  */
-bool UPlayerInteractComponent::HasClearLineOfSight(AActor* OtherActor, float& OutDistance)
+void UPlayerInteractComponent::TraceForInteractable()
 {
-	if (FirstPersonCameraComponent == nullptr || OtherActor == nullptr) return false;
+	if (FirstPersonCameraComponent == nullptr) return;
 
 	FVector Start = FirstPersonCameraComponent->GetComponentLocation();
-	FVector End = OtherActor->GetActorLocation();
-	// Compare by distance between this interact component and the other actor.
-	OutDistance = FVector::Dist(GetComponentLocation(), End);
+	FVector End = Start + FirstPersonCameraComponent->GetForwardVector() * DetectionDistance;
 
+	DrawDebugCylinder(GetWorld(), Start, End, DetectionRadius, 8, FColor::Red);
 	FHitResult HitResult;
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(PlayerOwner);
-
-	DrawDebugLine(GetWorld(), GetComponentLocation(), End, FColor::Green, false, 1, 0, 1);
-	if (GetWorld()->LineTraceSingleByChannel(
-		HitResult, Start, End, ECC_Visibility))
+	bool SweepResult = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		FQuat::Identity,
+		ECC_Visibility,
+		FCollisionShape::MakeSphere(DetectionRadius));
+	if (SweepResult)
 	{
-		AActor* HitActor = HitResult.GetActor();
-		if (HitActor != nullptr && HitActor->IsA(AInteractable::StaticClass()))
+		if (AInteractable* CurrentClosest = Cast<AInteractable>(HitResult.GetActor()))
 		{
-		    return true;
+			TracedInteractable = CurrentClosest;
+			DrawDebugLine(GetWorld(), GetComponentLocation(), TracedInteractable->GetActorLocation(), FColor::Green, false, 1, 0, 1);
+			return;
 		}
 	}
-	return false;
+	TracedInteractable = nullptr;
 }
 
-/**
- * Iterates through the overlapped interactables to assign the closest one, if anny.
- * @returns A pointer to the closest interactable, or nullptr.
- */
-AInteractable* UPlayerInteractComponent::GetClosestInteractable()
-{
-	if (OverlappedInteractables.IsEmpty()) return nullptr;
-
-	AInteractable* CurrentClosest = nullptr;
-	float MinDistance = MAX_int8;
-	for (AInteractable* Interactable : OverlappedInteractables)
-	{
-		if (Interactable == nullptr) continue;
-		float OutDistance = MAX_int8;
-	    if (HasClearLineOfSight(Interactable, OutDistance))
-	    {
-	        if (OutDistance < MinDistance)
-	        {
-				MinDistance = OutDistance;
-				CurrentClosest = Interactable;
-	        }
-	    }
-	}
-	return CurrentClosest;
-}
-
-/** Getter for the chosen interactable, if any. */
+/** Getter for the traced interactable, if any. */
 AInteractable* UPlayerInteractComponent::GetChosenInteractable()
 {
-	return ChosenInteractable;
+	return TracedInteractable;
 }

@@ -14,7 +14,9 @@ class PHASMUS_API UPlayerInteractComponent : public USphereComponent
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere)
-	float DetectionRadius = 30.f;
+	float DetectionDistance = 100.f;
+	UPROPERTY(EditAnywhere)
+	float DetectionRadius = 14.f;
 
 	UPROPERTY(EditAnywhere, Category = Components)
 	class UCameraComponent* FirstPersonCameraComponent;
@@ -30,8 +32,8 @@ class PHASMUS_API UPlayerInteractComponent : public USphereComponent
 
 	TSet<AInteractable*> OverlappedInteractables;
 	bool HasClearLineOfSight(AActor* OtherActor, float& OutDistance);
-	AInteractable* ChosenInteractable;
-	AInteractable* GetClosestInteractable();
+	AInteractable* TracedInteractable;
+	void TraceForInteractable();
 
 public:
 	// Sets default values for this component's properties
