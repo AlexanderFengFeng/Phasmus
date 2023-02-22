@@ -24,8 +24,6 @@ class PHASMUS_API UPlayerInteractComponent : public USphereComponent
 
     void ShowInteractPromptIfNeeded();
 
-	TSet<AInteractable*> OverlappedInteractables;
-	bool HasClearLineOfSight(AActor* OtherActor, float& OutDistance);
 	AInteractable* TracedInteractable;
 	void TraceForInteractable();
 
