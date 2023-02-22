@@ -29,7 +29,8 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* InteractableComponent;
-    
+
+	bool bIsInteractable = true;
 
 public:	
 	// Called every frame
@@ -37,4 +38,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = Interaction)
 	FOnInteract OnInteract;
+
+	bool IsInteractable() const { return bIsInteractable; }
 };
