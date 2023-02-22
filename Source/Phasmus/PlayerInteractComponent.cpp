@@ -19,9 +19,6 @@ UPlayerInteractComponent::UPlayerInteractComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	SetGenerateOverlapEvents(true);
 	SphereRadius = DetectionRadius;
-
-	OnComponentBeginOverlap.AddDynamic(this, &UPlayerInteractComponent::OnSphereBeginOverlap);
-    OnComponentEndOverlap.AddDynamic(this, &UPlayerInteractComponent::OnSphereEndOverlap);
 }
 
 // Called when the game starts
