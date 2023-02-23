@@ -15,13 +15,26 @@ class PHASMUS_API ADoor : public AInteractable
 	GENERATED_BODY()
 
     UPROPERTY(EditAnywhere)
-    bool bOpensClockwise = false;
-	bool bIsClosed = true;
+    bool bOpensCounterClockwise = false;
+
 	bool bIsRotating = false;
+	bool bIsClosed = true;
 
-	float ClosedYaw;
+	UPROPERTY(EditAnywhere)
+	bool bIsCloseable = true;
+	UPROPERTY(EditAnywhere)
+	float RotationSpeed = 90.f;
 
-	float RotationSpeed = 30.f;
+	int DirectionModifier;			// Sign for angle adjustment when opening door.
+	int OpenOrClosingModifier = 1;	// Sign for angle adjustment based on closing or opening.
+	float ClosedYaw;				// Initial yaw.
+	float OpenYaw;					// Fully open yaw.
+
+	// Dynamic properties.
+	float InitialYaw;
+	float TargetYaw;
+
+	void OpenOrCloseDoorOnTick(float DeltaSeconds);
 
 protected:
 	virtual void BeginPlay() override;
@@ -29,6 +42,6 @@ protected:
 
 public:
 	UFUNCTION()
-	void OpenDoor(class APhasmusPlayerCharacter* PlayerCharacter);
+	void OpenOrCloseDoor(class APhasmusPlayerCharacter* PlayerCharacter);
 	
 };

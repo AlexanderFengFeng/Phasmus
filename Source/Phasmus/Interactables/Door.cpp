@@ -6,14 +6,17 @@
 void ADoor::BeginPlay()
 {
     Super::BeginPlay();
+    DirectionModifier = bOpensCounterClockwise ? 1 : -1;
     ClosedYaw = GetActorRotation().Yaw;
-    OnInteract.AddDynamic(this, &ADoor::OpenDoor);
+    OpenYaw = ClosedYaw + 90.f * DirectionModifier;
+    InitialYaw = ClosedYaw;
+    TargetYaw = OpenYaw;
+    OnInteract.AddDynamic(this, &ADoor::OpenOrCloseDoor);
 }
 
 
-void ADoor::OpenDoor(APhasmusPlayerCharacter* PlayerCharacter)
+void ADoor::OpenOrCloseDoor(APhasmusPlayerCharacter* PlayerCharacter)
 {
-    UE_LOG(LogTemp, Warning, TEXT("ClosedYaw: %f"), ClosedYaw);
     bIsRotating = true;
     bIsInteractable = false;
 }
@@ -22,21 +25,26 @@ void ADoor::Tick(float DeltaSeconds)
 {
     if (bIsRotating)
     {
-        float TargetYaw = GetActorRotation().Yaw + RotationSpeed * DeltaSeconds;
-        UE_LOG(LogTemp, Warning, TEXT("ClosedYaw: %f"), ClosedYaw);
-        UE_LOG(LogTemp, Warning, TEXT("Diff: %f"), FMath::FindDeltaAngleDegrees(TargetYaw, ClosedYaw));
-        if (FMath::FindDeltaAngleDegrees(TargetYaw, ClosedYaw) >= 90.f)
-        //if (FMath::Abs(FMath::FindDeltaAngleDegrees(TargetYaw, ClosedYaw)) >= 90.f)
-        {
-            TargetYaw = ClosedYaw + 90.f;
-            bIsRotating = false;
-            bIsInteractable = true;
-        }
-        //UE_LOG(LogTemp, Warning, TEXT("TargetYaw2: %f"), TargetYaw);
-        SetActorRotation(FRotator(GetActorRotation().Pitch, TargetYaw, GetActorRotation().Roll));
-        //AddActorLocalRotation(FRotator(0.f, TargetYaw, 0.f));
-
-        //FRotator NewRelativeRotation = (GetActorRotation())
-        //SetActorRelativeRotation()
+        OpenOrCloseDoorOnTick(DeltaSeconds);
     }
+}
+
+void ADoor::OpenOrCloseDoorOnTick(float DeltaSeconds)
+{
+    float NextYaw = GetActorRotation().Yaw + RotationSpeed * DeltaSeconds * DirectionModifier * OpenOrClosingModifier;
+    if (FMath::Abs(FMath::FindDeltaAngleDegrees(InitialYaw, NextYaw)) >= 90.f)
+    {
+        NextYaw = TargetYaw;        // Bound next yaw to the target yaw.
+        bIsRotating = false;        // End rotating action.
+        bIsClosed = !bIsClosed;     // Change sign of door.
+
+        if (bIsCloseable || bIsClosed)
+        {
+            bIsInteractable = true;     // Reenable interactions.
+            DirectionModifier = -DirectionModifier;
+            InitialYaw = bIsClosed ? ClosedYaw : OpenYaw;
+            TargetYaw = bIsClosed ? OpenYaw : ClosedYaw;
+        }
+    }
+    SetActorRotation(FRotator(GetActorRotation().Pitch, NextYaw, GetActorRotation().Roll));
 }
