@@ -81,9 +81,12 @@ void UPlayerInteractComponent::TraceForInteractable()
 	{
 		if (AInteractable* CurrentClosest = Cast<AInteractable>(HitResult.GetActor()))
 		{
-			TracedInteractable = CurrentClosest;
-			DrawDebugLine(GetWorld(), GetComponentLocation(), TracedInteractable->GetActorLocation(), FColor::Green, false, 1, 0, 1);
-			return;
+			if (CurrentClosest->IsInteractable())
+			{
+			    TracedInteractable = CurrentClosest;
+			    DrawDebugLine(GetWorld(), GetComponentLocation(), TracedInteractable->GetActorLocation(), FColor::Green, false, 1, 0, 1);
+			    return;
+			}
 		}
 	}
 	TracedInteractable = nullptr;
