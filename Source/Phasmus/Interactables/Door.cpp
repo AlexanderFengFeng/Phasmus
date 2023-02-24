@@ -14,7 +14,6 @@ void ADoor::BeginPlay()
     OnInteract.AddDynamic(this, &ADoor::OpenOrCloseDoor);
 }
 
-
 void ADoor::OpenOrCloseDoor(APhasmusPlayerCharacter* PlayerCharacter)
 {
     bIsRotating = true;
@@ -36,9 +35,9 @@ void ADoor::OpenOrCloseDoorOnTick(float DeltaSeconds)
     {
         NextYaw = TargetYaw;        // Bound next yaw to the target yaw.
         bIsRotating = false;        // End rotating action.
-        bIsClosed = !bIsClosed;     // Change sign of door.
+        bIsClosed = !bIsClosed;     // Change status of door.
 
-        if (bIsCloseable || bIsClosed)
+        if (bIsCloseable || bIsClosed)  // Only reenable interactions if can be closed after opening.
         {
             bIsInteractable = true;     // Reenable interactions.
             DirectionModifier = -DirectionModifier;
