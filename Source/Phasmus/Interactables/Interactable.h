@@ -10,6 +10,7 @@
 class APhasmusPlayerCharacter;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteract, APhasmusPlayerCharacter*, PlayerCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnReleaseInteraction, APhasmusPlayerCharacter*, PlayerCharacter);
 
 UCLASS()
 class PHASMUS_API AInteractable : public AActor
@@ -38,6 +39,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = Interaction)
 	FOnInteract OnInteract;
+	UPROPERTY(BlueprintAssignable, Category = Interaction)
+	FOnReleaseInteraction OnReleaseInteraction;
 
 	bool IsInteractable() const { return bIsInteractable; }
 };
