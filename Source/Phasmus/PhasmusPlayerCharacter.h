@@ -7,7 +7,7 @@
 #include "PhasmusPlayerCharacter.generated.h"
 
 class APhasmusPlayerController;
-//class AFlashlight;
+class AInteractable;
 
 class UCameraComponent;
 class UHeadsUpDisplay;
@@ -45,7 +45,10 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 	// Handles looking around. Linked to look sensitivity
 	void LookUp(float Value);
 	void LookRight(float Value);
+
+	AInteractable* ChosenInteractable;
 	void Interact();
+	void ReleaseInteraction();
 	void UseFlashlight();
 
 	UPROPERTY(EditAnywhere)

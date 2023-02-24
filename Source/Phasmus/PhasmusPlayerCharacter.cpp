@@ -105,6 +105,7 @@ void APhasmusPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 
 	// Bind action events
     PlayerInputComponent->BindAction("PrimaryAction", IE_Pressed, this, &APhasmusPlayerCharacter::Interact);
+    PlayerInputComponent->BindAction("PrimaryAction", IE_Released, this, &APhasmusPlayerCharacter::ReleaseInteraction);
     PlayerInputComponent->BindAction("Flashlight", IE_Pressed, this, &APhasmusPlayerCharacter::UseFlashlight);
 
 	// Bind movement events
@@ -144,10 +145,20 @@ void APhasmusPlayerCharacter::LookRight(float Value)
 
 void APhasmusPlayerCharacter::Interact()
 {
-    AInteractable* ChosenInteractable = InteractComponent->GetChosenInteractable();
+    ChosenInteractable = InteractComponent->GetChosenInteractable();
     if (ChosenInteractable != nullptr)
     {
         ChosenInteractable->OnInteract.Broadcast(this);
+    }
+}
+
+/** Releases the chosen interactable from its interaction, then unassign its pointer. */
+void APhasmusPlayerCharacter::ReleaseInteraction()
+{
+    if (ChosenInteractable != nullptr)
+    {
+        ChosenInteractable->OnReleaseInteraction.Broadcast(this);
+        ChosenInteractable = nullptr;
     }
 }
 
