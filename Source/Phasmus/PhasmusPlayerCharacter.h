@@ -45,6 +45,8 @@ class PHASMUS_API APhasmusPlayerCharacter : public ACharacter
 	// Handles looking around. Linked to look sensitivity
 	void LookUp(float Value);
 	void LookRight(float Value);
+	float LookUpRate = 0.f;
+	float LookRightRate = 0.f;
 
 	AInteractable* ChosenInteractable;
 	void Interact();
@@ -80,4 +82,7 @@ public:
 
 	USceneComponent* GetLeftHandAnchor() const { return LeftHandAnchor; }
 	USceneComponent* GetRightHandAnchor() const { return RightHandAnchor; }
+
+	float inline GetLookUpRate() const { return LookUpRate; }
+	float inline GetLookRightRate() const { return LookRightRate; }
 };

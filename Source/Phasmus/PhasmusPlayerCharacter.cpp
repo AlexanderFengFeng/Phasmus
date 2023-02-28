@@ -135,11 +135,13 @@ void APhasmusPlayerCharacter::MoveRight(float Value)
 
 void APhasmusPlayerCharacter::LookUp(float Value)
 {
+    LookUpRate = Value;
 	AddControllerPitchInput(Value * LookSensitivity);
 }
 
 void APhasmusPlayerCharacter::LookRight(float Value)
 {
+    LookRightRate = Value;
 	AddControllerYawInput(Value * LookSensitivity);
 }
 
