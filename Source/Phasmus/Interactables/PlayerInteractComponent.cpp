@@ -1,22 +1,17 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "PlayerInteractComponent.h"
+
+#include "DrawDebugHelpers.h"
+#include "Interactable.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
-#include "DrawDebugHelpers.h"
-#include "Interactables/Interactable.h"
-#include "Kismet/KismetSystemLibrary.h"
-#include "PhasmusPlayerCharacter.h"
+#include "Character/PhasmusPlayerCharacter.h"
 #include "UI/HeadsUpDisplay.h"
 
 // Sets default values for this component's properties
 UPlayerInteractComponent::UPlayerInteractComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	// Set this component to be initialized when the game starts, and to be ticked every frame.
 	SetGenerateOverlapEvents(true);
 	SphereRadius = DetectionRadius;
 }
@@ -42,18 +37,20 @@ void UPlayerInteractComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 void UPlayerInteractComponent::ShowInteractPromptIfNeeded()
 {
-    if (PlayerOwner == nullptr) return;
-    UHeadsUpDisplay* HUD = PlayerOwner->GetHUD();
-	if (HUD == nullptr) return;
-
-    if (TracedInteractable != nullptr)
-    {
-        HUD->UpdateInteractPromptVisibility(true);
-    }
-    else
-    {
-        HUD->UpdateInteractPromptVisibility(false);
-    }
+    if (!IsValid(PlayerOwner))
+    	return;
+	
+	if (auto* HUD = PlayerOwner->GetHUD())
+	{
+	    if (TracedInteractable != nullptr)
+	    {
+	        HUD->UpdateInteractPromptVisibility(true);
+	    }
+	    else
+	    {
+	        HUD->UpdateInteractPromptVisibility(false);
+	    }
+	}
 }
 
 /**
@@ -65,8 +62,8 @@ void UPlayerInteractComponent::TraceForInteractable()
 {
 	if (FirstPersonCameraComponent == nullptr) return;
 
-	FVector Start = FirstPersonCameraComponent->GetComponentLocation();
-	FVector End = Start + FirstPersonCameraComponent->GetForwardVector() * DetectionDistance;
+	const FVector Start = FirstPersonCameraComponent->GetComponentLocation();
+	const FVector End = Start + FirstPersonCameraComponent->GetForwardVector() * DetectionDistance;
 
 	DrawDebugCylinder(GetWorld(), Start, End, DetectionRadius, 8, FColor::Red);
 	FHitResult HitResult;
@@ -90,10 +87,4 @@ void UPlayerInteractComponent::TraceForInteractable()
 		}
 	}
 	TracedInteractable = nullptr;
-}
-
-/** Getter for the traced interactable, if any. */
-AInteractable* UPlayerInteractComponent::GetChosenInteractable()
-{
-	return TracedInteractable;
 }

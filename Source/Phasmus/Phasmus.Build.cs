@@ -8,6 +8,16 @@ public class Phasmus : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
+		// So we can reference headers from the root
+		PublicIncludePaths.Add("Phasmus");
+		
+		PublicDependencyModuleNames.AddRange(new string[]
+		{
+			"Core",
+			"CoreUObject",
+			"Engine",
+			"InputCore",
+			"HeadMountedDisplay"
+		});
 	}
 }

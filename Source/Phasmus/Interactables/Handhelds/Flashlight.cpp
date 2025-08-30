@@ -4,7 +4,7 @@
 #include "Flashlight.h"
 #include "Components/PointLightComponent.h"
 #include "Components/SpotLightComponent.h"
-#include "../../PhasmusPlayerCharacter.h"
+#include "Character/PhasmusPlayerCharacter.h"
 
 AFlashlight::AFlashlight()
 {

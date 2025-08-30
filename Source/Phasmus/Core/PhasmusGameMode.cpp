@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "PhasmusGameMode.h"
-#include "PhasmusCharacter.h"
+#include "Character/PhasmusCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 //APhasmusGameMode::APhasmusGameMode()

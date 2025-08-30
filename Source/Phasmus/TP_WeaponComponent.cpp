@@ -2,7 +2,7 @@
 
 
 #include "TP_WeaponComponent.h"
-#include "PhasmusCharacter.h"
+#include "Character/PhasmusCharacter.h"
 #include "PhasmusProjectile.h"
 #include "GameFramework/PlayerController.h"
 #include "Camera/PlayerCameraManager.h"

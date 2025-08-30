@@ -4,7 +4,7 @@
 #include "FlashlightPickup.h"
 
 #include "../Handhelds/Flashlight.h"
-#include "Phasmus/PhasmusPlayerCharacter.h"
+#include "Character/PhasmusPlayerCharacter.h"
 
 void AFlashlightPickup::BeginPlay()
 {

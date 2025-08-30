@@ -6,10 +6,10 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Interactables/Interactable.h"
+#include "Phasmus/Interactables/Interactable.h"
+#include "Phasmus/Interactables/PlayerInteractComponent.h"
 #include "PhasmusPlayerController.h"
-#include "PlayerInteractComponent.h"
-#include "UI/HeadsUpDisplay.h"
+#include "Phasmus/UI/HeadsUpDisplay.h"
 
 
 // Sets default values
@@ -147,7 +147,7 @@ void APhasmusPlayerCharacter::LookRight(float Value)
 
 void APhasmusPlayerCharacter::Interact()
 {
-    ChosenInteractable = InteractComponent->GetChosenInteractable();
+    ChosenInteractable = InteractComponent->GetCurrentInteractable();
     if (ChosenInteractable != nullptr)
     {
         ChosenInteractable->OnInteract.Broadcast(this);
